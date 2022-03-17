@@ -65,7 +65,7 @@ def morning_night_login(request):
         # 存储信息
         db = pymysql.connect(host='', user='', password='', port=, db='')
         cursor = db.cursor()
-        sql = 'CREATE TABLE IF NOT EXISTS user_data (record_date INT NOT NULL, username INT NOT NULL, password VARCHAR(255) NOT NULL, email VARCHAR(255) ' \
+        sql = 'CREATE TABLE IF NOT EXISTS user_data (record_date VARCHAR(255) NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, email VARCHAR(255) ' \
               ', enable VARCHAR(255) NOT NULL)'
         cursor.execute(sql)
         tm = time.localtime()
@@ -91,18 +91,18 @@ def morning_night_login(request):
         user_username = request.POST['user_username']
         user_password = request.POST['user_password']
         user_email = request.POST['user_email']
-        if user_email == '':
-            user_email = False
-            enable = False
-        else:
-            enable = True
-            try:
-                send(user_email, '已完成， 如需取消通知或停止使用，请向本邮箱发送信件。')
-            except:
-                messages.error(request, '邮箱错误')
-                return HttpResponseRedirect("/python/模拟登录-自动填报/")
         demo = Morning_punch(user_username, user_password)
         if demo.run() == '操作成功' or demo.run() == '您已上报过' or demo.run() == '未到上报时间':
+            if user_email == '':
+            user_email = False
+            enable = False
+            else:
+                enable = True
+                try:
+                    send(user_email, '已完成， 如需取消通知或停止使用，请向本邮箱发送信件。')
+                except:
+                    messages.error(request, '邮箱错误')
+                    return HttpResponseRedirect("/python/模拟登录-自动填报/")
             save_data(user_username, user_password, user_email, enable)
             messages.error(request, '成功')
             return HttpResponseRedirect("/python/模拟登录-自动填报/")
