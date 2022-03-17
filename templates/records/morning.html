@@ -1,0 +1,87 @@
+{% extends "records/base.html" %}
+{% block content %}
+    <main class="container">
+        <h5 class="text-monospace">
+            <br>
+            自动填报晨午晚检虽然很简单实现，但是难免会有一点麻烦，这里提供一个接口，大家直接填入自己的账号密码即可，之后会在每天早8点与13点
+            各填报一次，定位为南校区。如果你愿意的话可以留下你的邮箱，我会在每天填报完后为你发送一份邮件。
+        </h5>
+        <form class="col-5" method="post" action="{% url 'records:morning_night_login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input name="user_username" class="form-control" id="username" aria-describedby="emailHelp">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input name="user_password" class="form-control" id="password">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <small id="emailHelp" class="form-text text-muted">(选填)</small>
+                <input name="user_email" class="form-control" id="email">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <h5 class="text-monospace">
+            <br>
+            <br>
+            这里给出了最简单的代码，因为网站基本没有任何反爬措施，所以我写的很简单，甚至没有加请求头。<br><br>
+            前提知识:了解python基本语法，安装requests库
+            <a style="font-size: medium">(pip install requests)</a>
+        </h5>
+        <h5>
+            主要步骤:<br>
+            <a>
+            一、登录 &nbsp;&nbsp;&nbsp;
+            二、查看所需提交信息 &nbsp;&nbsp;&nbsp;
+            三、发送信息 &nbsp;&nbsp;&nbsp;
+            </a>
+        </h5>
+        <br>
+        <br>
+        <h5>源码如下:</h5>
+        <pre>
+    import requests
+    import time
+
+
+    login_url = 'https://xxcapp.xidian.edu.cn/uc/wap/login/check'
+    url = 'https://xxcapp.xidian.edu.cn/xisuncov/wap/open-report/save'
+    username = []
+    password = []
+    for i in range(len(username)):
+        session = requests.session()
+        login_data = {
+            'username': username[i],
+            'password': password[i],
+        }
+        session.post(url=login_url, data=login_data)
+
+        data = {
+            'sfzx': '1',
+            'tw': '1',
+            'area': '陕西省 西安市 长安区',
+            'city': '西安市',
+            'province': '陕西省',
+            'address': '陕西省西安市长安区韦曲街道学而思培优(西长安街校区)',
+            'geo_api_info': '{"type":"complete","position":{"Q":34.158996853299,"R":108.90904676649399,"lng":108.909047,"lat":34.158997},"location_type":"html5","message":"Get ipLocation failed.Get geolocation success.Convert Success.Get address success.","accuracy":8094.548535841807,"isConverted":true,"status":1,"addressComponent":{"citycode":"029","adcode":"610116","businessAreas":[{"name":"韦曲","id":"610116","location":{"Q":34.162202,"R":108.93736899999999,"lng":108.937369,"lat":34.162202}}],"neighborhoodType":"","neighborhood":"","building":"","buildingType":"","street":"西长安街","streetNumber":"599号","country":"中国","province":"陕西省","city":"西安市","district":"长安区","towncode":"610116001000","township":"韦曲街道"},"formattedAddress":"陕西省西安市长安区韦曲街道学而思培优(西长安街校区)","roads":[],"crosses":[],"pois":[],"info":"SUCCESS"}',
+            'sfcyglq': '0',
+            'sfyzz': '0',
+            'qtqk': '',
+            'ymtys': '0',
+        }
+        res = session.post(url=url, data=data).json()
+        print(username[i], end='--')
+        print(time.asctime(time.localtime(time.time())), end='--')
+        print(res['m'])
+    </pre>
+    </main>
+    {% if messages %}
+    <script>
+        {% for msg in messages %}
+        alert('{{ msg }}');
+        {% endfor %}
+    </script>
+    {% endif %}
+{% endblock %}

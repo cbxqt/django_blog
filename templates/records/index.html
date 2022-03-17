@@ -1,0 +1,62 @@
+{% extends "records/base.html" %}
+{% block content %}
+    <main class="container">
+        <div class="p-4 p-md-5 mb-4 text-white round bg-dark">
+            <div class="col-md-7 px-0">
+                <h1 class="display-5 fst-italic">Welcome to my first blog!</h1>
+                <p class="lead my-3">This Blog is mainly used to record some notes I usually study, as well as some
+                    feelings about books and movies.</p>
+                <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
+            </div>
+        </div>
+
+        <div class="row g-5">
+            <div class="col-md-8">
+                <h3 class="pb-4 mb-4 fst-italic border-bottom">
+                    Detailed information
+                </h3>
+                {% for note in notes %}
+                    <div class="row">
+                        <div class="col-12 py-3">
+                            <div class="card" style="width: auto;">
+                                <div class="card-header"><a
+                                        href={% url 'records:note' note.topic.text note.title %}>{{ note.title }}</a>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">{{ note.text }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="col-md-4">
+                <div class="position-sticky" style="top: 2rem;">
+                    <div class="p-4 mb-3 bg-light rounded">
+                        <h4 class="fst-italic">About</h4>
+                        <p class="mb-0">Some excerpts</p>
+                    </div>
+
+                    <div class="p-4">
+                        <h4 class="fst-italic">Archives</h4>
+                        {% for excerpt in excerpts %}
+                            <ol class="list-unstyled mb-0">
+                                <li>
+                                    <a>{{ excerpt.text }}</a>
+                                    <small>——《{{ excerpt.origin }}》</small>
+                                </li>
+                            </ol>
+                        {% endfor %}
+                    </div>
+
+                    <div class="p-4">
+                        <h4 class="fst-italic">Elsewhere</h4>
+                        <ol class="list-unstyled">
+                            <li><a href="{% url 'records:email' %}">Email</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
