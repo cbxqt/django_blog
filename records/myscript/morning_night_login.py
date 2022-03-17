@@ -10,7 +10,7 @@ class Morning_punch:
     def run(self):
         try:
             headers = {
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
+                'user-agent': '#',
             }
             login_url = 'https://xxcapp.xidian.edu.cn/uc/wap/login/check'
             url = 'https://xxcapp.xidian.edu.cn/xisuncov/wap/open-report/save'
@@ -41,5 +41,5 @@ class Morning_punch:
 
 
 if __name__ == '__main__':
-    demo = Morning_punch('20010190010', '123045.yunyun')
+    demo = Morning_punch('', '')
     print(demo.run())
