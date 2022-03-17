@@ -9,8 +9,8 @@ from email.mime.multipart import MIMEMultipart  # 发送多个部分
 
 
 def send(receiver, message):
-    send_user = 'cbxqt@qq.com'  # 发件人
-    password = 'oklqpjaarftycfgg'  # 密码
+    send_user = ''  # 发件人
+    password = ''  # 密码
     receive_users = receiver  # 收件人，可为list
     subject = '回复'  # 邮件主题
     email_text = message  # 邮件正文
@@ -52,7 +52,7 @@ def email(request):
     if request.method == 'POST':
         sender = request.POST['email']
         main_text = request.POST['main_text']
-        send('cbxqt@qq.com', sender+'\n'+main_text)
+        send('', sender+'\n'+main_text)
         messages.error(request, '成功')
         return HttpResponseRedirect('/email/')
     else:
@@ -63,7 +63,7 @@ def morning_night_login(request):
     # 注册晨午晚检
     def save_data(username, password, email, enable):
         # 存储信息
-        db = pymysql.connect(host='150.158.53.125', user='h', password='CAK8kH4NPDEJCWSX', port=3306, db='morning')
+        db = pymysql.connect(host='', user='', password='', port=, db='')
         cursor = db.cursor()
         sql = 'CREATE TABLE IF NOT EXISTS user_data (record_date INT NOT NULL, username INT NOT NULL, password VARCHAR(255) NOT NULL, email VARCHAR(255) ' \
               ', enable VARCHAR(255) NOT NULL)'
@@ -71,7 +71,6 @@ def morning_night_login(request):
         tm = time.localtime()
         date = str(tm.tm_year) + '-' + str(tm.tm_mon) + '-' + str(tm.tm_mday) + '-' + str(tm.tm_hour) + '-' + str(
             tm.tm_min)
-        db = pymysql.connect(host='150.158.53.125', user='h', password='CAK8kH4NPDEJCWSX', port=3306, db='morning')
         cursor = db.cursor()
         data = {'record_date': date, 'username': username, 'password': password,
                 'email': email, 'enable': enable}
